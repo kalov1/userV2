@@ -1,0 +1,19 @@
+#Sorry, I'm newbie script kiddy
+#Fix my errors, please
+Import-Module ActiveDirectory
+Import-Csv -Path 'C:\users.csv' -Delimiter ';' | ForEach-Object{ New-ADUser -Name ($_.LN + $_.FN)  `
+                                         -GivenName $_.FN                 `
+                                         -Surname $_.LN                   `
+                                         -Title $_.Role                   `
+                                         -MobilePhone $_.Phone            `
+                                         -Department $_.OU                `
+                                         -StreetAddress $_.Street         `
+                                         -PostalCode $_.ZIP               `
+                                         -City $_.City                    `
+                                         -Country 'RU'                      `
+                                         -Path ('OU=' + $_.OU + ',DC=skill39,DC=wsr') `
+                                         -AccountPassword(ConvertTo-SecureString('P@ssw0rd1') -AsPlainText -Force) `
+                                         -Enabled $true                    `
+                                         -CannotChangePassword $true}
+Import-Csv -Path 'C:\users.csv' ';' | ForEach-Object{Add-ADGroupMember -Identity $_.OU `
+                                         -Members ($_.LN + $_.FN)}
